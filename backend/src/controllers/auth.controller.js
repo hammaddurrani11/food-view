@@ -83,7 +83,7 @@ function logoutUser(req, res) {
 }
 
 async function registerFoodPartner(req, res) {
-    const { name, email, password } = req.body;
+    const { name, contactName, phone, address, email, password } = req.body;
 
     const isUserExists = await foodPartnerModel.findOne({
         email
@@ -99,6 +99,9 @@ async function registerFoodPartner(req, res) {
 
     const foodPartner = await foodPartnerModel.create({
         name,
+        contactName,
+        phone,
+        address,
         email,
         password: hashedPassword
     });
@@ -114,6 +117,9 @@ async function registerFoodPartner(req, res) {
         foodPartner: {
             name: name,
             email: email,
+            contactName: contactName,
+            phone: phone,
+            address: address,
             id: foodPartner._id
         }
     })
