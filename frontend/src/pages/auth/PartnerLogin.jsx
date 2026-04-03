@@ -26,7 +26,7 @@ const PartnerLogin = () => {
         })
 
         console.log('response', response.data);
-        navigate('/');
+        navigate('/create-food');
     }
     return (
         <div className="auth-container">

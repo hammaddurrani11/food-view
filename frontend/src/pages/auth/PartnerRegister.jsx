@@ -30,7 +30,7 @@ const PartnerRegister = () => {
         })
 
         console.log('response', response.data);
-        navigate('/');
+        navigate('/create-food');
     }
 
     return (
