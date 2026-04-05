@@ -65,7 +65,7 @@ const VideoCard = ({ videoSrc, description, partnerId }) => {
                     {description || "No description provided."}
                 </p>
                 <a
-                    href={`/partner/${partnerId}`}
+                    href={`/food-partner/${partnerId}`}
                     className="visit-store-btn"
                     onClick={(e) => e.stopPropagation()}
                 >

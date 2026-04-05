@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import './BusinessProfile.css'
+import '../../styles/BusinessProfile.css'
 
 const BusinessProfile = () => {
     const { id, videoId } = useParams()
     const navigate = useNavigate()
     const [partner, setPartner] = useState(null)
-    const [videos, setVideos] = useState([])
+    const [foodItems, setFoodItems] = useState([])
     const [loading, setLoading] = useState(true)
     const [isReelsOpen, setIsReelsOpen] = useState(false)
 
@@ -17,48 +17,43 @@ const BusinessProfile = () => {
 
     const fetchData = async () => {
         try {
-            const [partnerRes, videosRes] = await Promise.all([
-                axios.get(`http://localhost:3000/api/auth/food-partner/${id}`, { withCredentials: true }),
-                axios.get(`http://localhost:3000/api/food?foodPartner=${id}`, { withCredentials: true })
-            ])
+            const partnerRes = await axios.get(`http://localhost:3000/api/food-partner/${id}`, { withCredentials: true });
 
-            setPartner(partnerRes.data.foodPartner)
-            setVideos(videosRes.data.foodItems)
+            setPartner(partnerRes.data.foodPartner);
+            setFoodItems(partnerRes.data.foodItems);
         } catch (error) {
-            console.error('Error fetching profile data:', error)
+            console.error('Error fetching profile data:', error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     }
 
     useEffect(() => {
-        fetchData()
+        fetchData();
     }, [id])
 
     // Handle Reels Overlay state based on videoId in URL
     useEffect(() => {
-        if (videoId && videos.length > 0) {
-            setIsReelsOpen(true)
-            // Scroll to the specific video after a short delay to allow DOM to render
+        if (videoId && foodItems.length > 0) {
+            setIsReelsOpen(true);
             setTimeout(() => {
                 const target = videoRefs.current[videoId]
                 if (target) {
-                    target.scrollIntoView({ behavior: 'auto' })
-                    // Play the target video
+                    target.scrollIntoView({ behavior: 'auto' });
                     target.querySelector('video')?.play().catch(e => console.log("Autoplay blocked", e))
                 }
             }, 100)
         } else {
             setIsReelsOpen(false)
         }
-    }, [videoId, videos])
+    }, [videoId, foodItems])
 
-    const openReel = (vid) => {
-        navigate(`/partner/${id}/reel/${vid}`)
+    const openReel = (video_id) => {
+        navigate(`/food-partner/${id}/reel/${video_id}`);
     }
 
     const closeReels = () => {
-        navigate(`/partner/${id}`)
+        navigate(`/food-partner/${id}`);
     }
 
     // Intersection Observer to handle video playback on scroll
@@ -71,10 +66,9 @@ const BusinessProfile = () => {
                     const video = entry.target.querySelector('video')
                     if (entry.isIntersecting) {
                         video?.play().catch(e => console.log("Play failed", e))
-                        // Update URL to current video ID as user scrolls
                         const vid = entry.target.dataset.vid
                         if (vid && vid !== videoId) {
-                            navigate(`/partner/${id}/reel/${vid}`, { replace: true })
+                            navigate(`/food-partner/${id}/reel/${vid}`, { replace: true })
                         }
                     } else {
                         video?.pause()
@@ -90,7 +84,7 @@ const BusinessProfile = () => {
         return () => {
             elements.forEach(el => el && observer.unobserve(el))
         }
-    }, [isReelsOpen, videos])
+    }, [isReelsOpen, foodItems])
 
     if (loading) {
         return <div className="profile-container" style={{ textAlign: 'center', paddingTop: '100px' }}>Loading Business Profile...</div>
@@ -121,7 +115,7 @@ const BusinessProfile = () => {
                     </div>
                     <div className="stats-container">
                         <h3 className="stats-heading">
-                            Total Meals: <span className="stats-value">{videos.length} videos</span>
+                            Total Meals: <span className="stats-value">{foodItems?.length} videos</span>
                         </h3>
                     </div>
                 </div>
@@ -130,13 +124,13 @@ const BusinessProfile = () => {
             {/* Video Grid */}
             <div className="video-grid-container">
                 <div className="video-grid">
-                    {videos.map((video) => (
+                    {foodItems.map((item) => (
                         <div
-                            key={video._id}
+                            key={item._id}
                             className="grid-item"
-                            onClick={() => openReel(video._id)}
+                            onClick={() => openReel(item._id)}
                         >
-                            <video className="grid-video" src={video.video} muted />
+                            <video className="grid-video" src={item.video} muted />
                             <div className="grid-overlay">
                                 <svg viewBox="0 0 24 24" className="play-icon-small">
                                     <path d="M8 5v14l11-7z" />
@@ -155,7 +149,7 @@ const BusinessProfile = () => {
                         <span>{partner.name} - Reels</span>
                     </div>
                     <div className="reels-scroller" ref={scrollerRef}>
-                        {videos.map((video) => (
+                        {foodItems.map((video) => (
                             <div
                                 key={video._id}
                                 data-vid={video._id}

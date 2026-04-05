@@ -12,48 +12,11 @@ const Home = () => {
             const response = await axios.get('http://localhost:3000/api/food/', {
                 withCredentials: true
             })
-            if (response.data.foodItems && response.data.foodItems.length > 0) {
-                setFoodItems(response.data.foodItems)
-            } else {
-                // Mock data if no backend items found to show the "WOW" effect
-                setFoodItems([
-                    {
-                        _id: '1',
-                        video: 'https://assets.mixkit.io/videos/preview/mixkit-fresh-vegetables-and-fruits-on-the-table-41221-large.mp4',
-                        description: 'Delicious fresh salad with vibrant organic vegetables. Perfect for a healthy lunch!',
-                        foodPartnerId: 'p1'
-                    },
-                    {
-                        _id: '2',
-                        video: 'https://assets.mixkit.io/videos/preview/mixkit-close-up-of-a-pizza-being-sliced-3058-large.mp4',
-                        description: 'Wood-fired pizza with extra cheese and fresh basil. Experience the true taste of Italy.',
-                        foodPartnerId: 'p2'
-                    },
-                    {
-                        _id: '3',
-                        video: 'https://assets.mixkit.io/videos/preview/mixkit-pouring-chocolate-on-a-stack-of-pancakes-41249-large.mp4',
-                        description: 'Fluffy pancakes with rich chocolate glaze. The ultimate breakfast treat you deserve.',
-                        foodPartnerId: 'p3'
-                    }
-                ])
-            }
+
+            setFoodItems(response.data.foodItems);
+
         } catch (error) {
-            console.error('Error fetching food items:', error)
-            // Mock data as fallback for demonstration
-            setFoodItems([
-                {
-                    _id: '1',
-                    video: 'https://assets.mixkit.io/videos/preview/mixkit-fresh-vegetables-and-fruits-on-the-table-41221-large.mp4',
-                    description: 'Delicious fresh salad with vibrant organic vegetables. Perfect for a healthy lunch!',
-                    foodPartnerId: 'p1'
-                },
-                {
-                    _id: '2',
-                    video: 'https://assets.mixkit.io/videos/preview/mixkit-close-up-of-a-pizza-being-sliced-3058-large.mp4',
-                    description: 'Wood-fired pizza with extra cheese and fresh basil. Experience the true taste of Italy.',
-                    foodPartnerId: 'p2'
-                }
-            ])
+            console.error('Error fetching food items:', error);
         } finally {
             setLoading(false)
         }
@@ -67,6 +30,14 @@ const Home = () => {
         return (
             <div className="reel-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#000', color: '#fff' }}>
                 <p>Loading premium reels...</p>
+            </div>
+        )
+    }
+
+    if (foodItems.length == 0) {
+        return (
+            <div className="reel-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#000', color: '#fff' }}>
+                <p>There are no Food Items Listed at the moment.</p>
             </div>
         )
     }
