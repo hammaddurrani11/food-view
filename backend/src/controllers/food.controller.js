@@ -4,6 +4,10 @@ const { v4: uuid } = require('uuid');
 
 async function createFood(req, res) {
     try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No video file provided' });
+        }
+
         const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid());
 
         const foodItem = await foodItemModel.create({
@@ -20,6 +24,7 @@ async function createFood(req, res) {
 
     } catch (error) {
         console.error(error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 
 }

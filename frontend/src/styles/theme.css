@@ -15,15 +15,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-color: #0f172a;
+    --bg-color: #111;
     --text-color: #f8fafc;
     --text-secondary: #94a3b8;
-    --primary-color: #fb7185;
+    --primary-color: green;
     --primary-hover: #f43f5e;
-    --input-bg: #1e293b;
+    --input-bg: #1a212e;
     --input-border: #334155;
-    --card-bg: #1e293b;
-    --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    --card-bg: #000;
+    --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.155);
   }
 }
 
