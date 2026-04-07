@@ -11,9 +11,11 @@ const Home = () => {
         try {
             const response = await axios.get('http://localhost:3000/api/food/', {
                 withCredentials: true
-            })
+            });
 
-            setFoodItems(response.data.foodItems);
+            apiHelper(response.data, () => {
+                setFoodItems(response.data.foodItems);
+            });
 
         } catch (error) {
             console.error('Error fetching food items:', error);
